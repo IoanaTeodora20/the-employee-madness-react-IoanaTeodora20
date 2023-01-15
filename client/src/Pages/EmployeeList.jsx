@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Loading from "../Components/Loading";
 import EmployeeTable from "../Components/EmployeeTable";
 
-const fetchEmployees = (signal) => {
+const fetchEmployees = (signal, position, level) => {
   return fetch("/api/employees", { signal }).then((res) => res.json());
 };
 

@@ -1,0 +1,6 @@
+[
+  { "name": "Mask", "type": "Clothing", "amount": 10 },
+  { "name": "Vest", "type": "Clothing", "amount": 10 },
+  { "name": "Keyboard", "type": "Tech", "amount": 20 },
+  { "name": "Mugs", "type": "Ceramic", "amount": 5 }
+]
