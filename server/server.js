@@ -2,11 +2,16 @@ require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
+const bodyParser = require("body-parser");
 const EmployeeModel = require("./db/employee.model");
 const Equipment = require("./db/equipmentSchema");
+const favColorModel = require("./db/favColorModel");
 const positions = require("../server/populate/positions.json");
 const levels = require("../server/populate/levels.json");
+const { ObjectID, ObjectId } = require("bson");
+const { json } = require("express");
 const PORT = 8080;
+const objectId = require("mongodb").ObjectId;
 
 if (!process.env.MONGO_URL) {
   console.error("Missing MONGO_URL environment variable");
@@ -15,7 +20,8 @@ if (!process.env.MONGO_URL) {
 
 const app = express();
 
-app.use(express.json());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(
   cors({
     origin: ["http://localhost:3000"],
@@ -25,6 +31,7 @@ app.use(
   })
 );
 
+let updatedPresence;
 app.use("/api/employees/:id", async (req, res, next) => {
   let employee = null;
 
@@ -43,14 +50,27 @@ app.use("/api/employees/:id", async (req, res, next) => {
 });
 
 app.get("/api/employees/", async (req, res) => {
-  const employees = await EmployeeModel.find({}).sort({
-    created: "desc",
+  const addPresence = await EmployeeModel.updateMany({
+    $set: { presence: false },
   });
+
+  const employeeEquipment = await EmployeeModel.find({
+    "employees.equipment": Equipment,
+  });
+  const employees = await EmployeeModel.find({});
   return res.json(employees);
 });
 
 app.get("/api/employees/:id", (req, res) => {
   return res.json(req.employee);
+});
+
+app.post("/api/inputName", async (req, res) => {
+  const nameInput = req.body.inputName;
+  const employeeList = await EmployeeModel.find({
+    name: new RegExp(req.body.inputName, "i"),
+  });
+  res.json(employeeList);
 });
 
 app.get("/api/robert", async (req, res) => {
@@ -137,6 +157,90 @@ app.patch("/api/equipments/:id", async (req, res, next) => {
   } catch (err) {
     return next(err);
   }
+});
+
+app.delete("/api/equipments/:id", async (req, res, next) => {
+  try {
+    const deleted = await req.equipment.delete();
+    return res.json(deleted);
+  } catch (err) {
+    return next(err);
+  }
+});
+
+app.use("/api/missing/:id", async (req, res, next) => {
+  let missingEmployee = null;
+
+  try {
+    missingEmployee = await EmployeeModel.findById(req.params.id);
+  } catch (err) {
+    return next(err);
+  }
+
+  if (!missingEmployee) {
+    return res.status(404).end("Employee not found");
+  }
+
+  req.missingEmployee = missingEmployee;
+  next();
+});
+
+app.get("/api/missing/:id", (req, res) => {
+  return res.json(req.missingEmployee);
+});
+
+app.post("/api/missing/", async (req, res) => {
+  let employeeId = objectId(req.body.id);
+  let employee = await EmployeeModel.findById(employeeId);
+  await EmployeeModel.findByIdAndUpdate(employeeId, {
+    presence: !employee.presence,
+  });
+  let allEmployees = await EmployeeModel.find();
+  res.json({ result: allEmployees });
+});
+
+app.get("/api/missing/", async (req, res) => {
+  let missingEmployees = await EmployeeModel.find({ presence: false });
+  res.json(missingEmployees);
+});
+
+app.delete("/api/missing/:id", async (req, res, next) => {
+  try {
+    const deleted = await req.missingEmployee.delete();
+    return res.json(deleted);
+  } catch (err) {
+    return next(err);
+  }
+});
+
+app.get("/api/colors", async (req, res) => {
+  const colorsData = await favColorModel.find();
+  res.json(
+    colorsData.map((color) => ({
+      id: color._id,
+      name: color.name,
+    }))
+  );
+});
+
+app.post("/api/checkMap", async (req, res) => {
+  let employeeId = objectId(req.body.id);
+  let employee = await EmployeeModel.findById(employeeId);
+  await EmployeeModel.findByIdAndUpdate(employee, {
+    map: !employee.map,
+  });
+  const result = await EmployeeModel.find({ position: req.body.position });
+  res.json({ result: result });
+});
+
+app.post("/api/ticked", async (req, res) => {
+  let employeeId = objectId(req.body.id);
+  let employee = await EmployeeModel.findById(employeeId);
+  await EmployeeModel.findByIdAndUpdate(employee, {
+    map: !employee.map,
+  });
+  let result = await EmployeeModel.find();
+  res.json({ result: result });
 });
 
 const main = async () => {

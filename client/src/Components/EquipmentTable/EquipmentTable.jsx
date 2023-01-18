@@ -5,8 +5,6 @@ import "./EquipmentTable.css";
 // const base_url = process.env.REACT_APP_API_URL;
 
 const EquipmentTable = ({ equipmentData, onDelete }) => {
-  // const [employeesData, setEmployeesData] = useState(employees);
-
   return (
     <div className="EquipmentTable">
       <table>

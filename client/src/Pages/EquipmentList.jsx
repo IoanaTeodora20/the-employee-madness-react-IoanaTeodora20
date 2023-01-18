@@ -15,10 +15,6 @@ const deleteEquipments = (id) => {
 const EquipmentList = () => {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState(null);
-  // const [searchOrFilter, setSearchOrFilter] = useState({
-  //   search: "",
-  //   filter: { position: "", level: "" },
-  // });
 
   const handleDelete = (id) => {
     deleteEquipments(id).catch((err) => {
@@ -30,42 +26,29 @@ const EquipmentList = () => {
     });
   };
 
-  useEffect(
-    () => {
-      const controller = new AbortController();
+  useEffect(() => {
+    const controller = new AbortController();
 
-      fetchEquipments(controller.signal)
-        .then((equipments) => {
-          setLoading(false);
-          setData(equipments);
-        })
-        .catch((error) => {
-          if (error.name !== "AbortError") {
-            setData(null);
-            throw error;
-          }
-        });
+    fetchEquipments(controller.signal)
+      .then((equipments) => {
+        setLoading(false);
+        setData(equipments);
+      })
+      .catch((error) => {
+        if (error.name !== "AbortError") {
+          setData(null);
+          throw error;
+        }
+      });
 
-      return () => controller.abort();
-    },
-    [
-      // searchOrFilter.search,
-      // searchOrFilter.filter.position,
-      // searchOrFilter.filter.level,
-    ]
-  );
+    return () => controller.abort();
+  }, []);
 
   if (loading) {
     return <Loading />;
   }
 
-  return (
-    <EquipmentTable
-      equipmentData={data}
-      // changeSearchOrFilter={setSearchOrFilter}
-      onDelete={handleDelete}
-    />
-  );
+  return <EquipmentTable equipmentData={data} onDelete={handleDelete} />;
 };
 
 export default EquipmentList;

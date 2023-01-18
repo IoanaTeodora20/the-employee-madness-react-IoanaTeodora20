@@ -14,6 +14,7 @@ import EquipmentCreator from "./Pages/EquipmentCreator";
 import "./index.css";
 import TableTest from "./Pages/TableTest";
 import FormTest from "./Pages/FormTest";
+import MissingDataList from "./Pages/MissingTableList";
 
 const router = createBrowserRouter([
   {
@@ -50,6 +51,7 @@ const router = createBrowserRouter([
         element: <EquipmentUpdater />,
       },
       { path: "/createEquip", element: <EquipmentCreator /> },
+      { path: "/missingEmployees", element: <MissingDataList /> },
     ],
   },
 ]);

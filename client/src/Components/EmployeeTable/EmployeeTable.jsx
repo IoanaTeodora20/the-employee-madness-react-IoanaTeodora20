@@ -4,16 +4,70 @@ import { useEffect, useState } from "react";
 // import axios from "axios";
 // const base_url = process.env.REACT_APP_API_URL;
 
-const EmployeeTable = ({ employees, onDelete, changeSearchOrFilter }) => {
+const EmployeeTable = ({ employees, onDelete }) => {
   const [employeesData, setEmployeesData] = useState(employees);
+  // const [ids, setIds] = useState([]);
   const [position, setPosition] = useState();
   const [level, setLevel] = useState();
+  const [inputName, setInputName] = useState("");
+  const [id, setId] = useState();
   const [sorting, setSorting] = useState({ field: "", type: 1 });
+  const [error, setError] = useState(false);
 
   const sortTable = (field) => {
     setSorting({ field: field, type: !sorting.type });
   };
 
+  const filterEmployees = (e) => {
+    e.preventDefault();
+    let employees = employeesData.map((item) => item.map);
+    let employeesTicked = employees.filter((elem) => elem == true);
+    if (employeesTicked.length == 1) {
+      handlePositionClick(position, id);
+      setError(false);
+    } else if (employeesTicked.length > 1) {
+      setError(true);
+    }
+  };
+
+  const handlePresenceClick = async (id) => {
+    fetch("http://localhost:8080/api/missing", {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ id: id }),
+    })
+      .then((response) => response.json())
+      .then((data) => setEmployeesData(data.result));
+  };
+
+  const handlePositionClick = async (position, id) => {
+    fetch("http://localhost:8080/api/checkMap", {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ position: position, id: id }),
+    })
+      .then((response) => response.json())
+      .then((data) => setEmployeesData(data.result));
+  };
+
+  const handlePositionTicked = async (id) => {
+    fetch("http://localhost:8080/api/ticked", {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ id: id }),
+    })
+      .then((response) => response.json())
+      .then((data) => setEmployeesData(data.result));
+  };
   const positions = Array.from(
     new Set(employees.map((employee) => employee.position))
   );
@@ -23,7 +77,6 @@ const EmployeeTable = ({ employees, onDelete, changeSearchOrFilter }) => {
   );
 
   useEffect(() => {
-    console.log("asd");
     let employeesFiltered = [...employees];
     setEmployeesData(
       employeesFiltered.filter((employee) => {
@@ -57,7 +110,21 @@ const EmployeeTable = ({ employees, onDelete, changeSearchOrFilter }) => {
     e.preventDefault();
     setPosition(false);
     setLevel(false);
+    setError(false);
   };
+
+  useEffect(() => {
+    fetch("/api/inputName", {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ inputName }),
+    })
+      .then((response) => response.json())
+      .then((data) => setEmployeesData(data));
+  }, [inputName]);
 
   return (
     <div className="EmployeeTable">
@@ -65,9 +132,11 @@ const EmployeeTable = ({ employees, onDelete, changeSearchOrFilter }) => {
         <thead>
           <tr>
             <th>Present</th>
+            <th onClick={(e) => filterEmployees(e)}>Map</th>
             <th onClick={() => sortTable("name")}>Name</th>
             <th>Level</th>
             <th>Position</th>
+            <th>Years Experience</th>
             <th>
               <select onChange={(e) => setPosition(e.target.value)}>
                 <option value="" disabled default selected>
@@ -89,6 +158,16 @@ const EmployeeTable = ({ employees, onDelete, changeSearchOrFilter }) => {
               </select>
             </th>
             <th>
+              <input
+                type="text"
+                placeholder="Search by Name"
+                onChange={(e) => {
+                  e.preventDefault();
+                  setInputName(e.target.value);
+                }}
+              />
+            </th>
+            <th>
               <button onClick={(e) => clearFilters(e)}>
                 Clear All filters
               </button>
@@ -99,11 +178,32 @@ const EmployeeTable = ({ employees, onDelete, changeSearchOrFilter }) => {
           {employeesData.map((employee) => (
             <tr key={employee._id}>
               <td>
-                <input type="checkbox" id="present" name="present" />
+                <input
+                  type="checkbox"
+                  id="present"
+                  name="present"
+                  checked={employee.presence ? "checked" : ""}
+                  onChange={() => handlePresenceClick(employee._id)}
+                />
+              </td>
+              <td>
+                <input
+                  type="checkbox"
+                  id="map"
+                  name="map"
+                  checked={employee.map ? "checked" : ""}
+                  onChange={() => {
+                    setId(employee._id);
+                    setPosition(employee.position);
+                    handlePositionTicked(employee._id);
+                  }}
+                />
+                {error ? <p>Please, select only ONE employee</p> : null}
               </td>
               <td>{employee.name}</td>
               <td>{employee.level}</td>
               <td>{employee.position}</td>
+              <td>{employee.years_experience}</td>
               <td>
                 <Link to={`/update/${employee._id}`}>
                   <button type="button">Update</button>
@@ -121,3 +221,61 @@ const EmployeeTable = ({ employees, onDelete, changeSearchOrFilter }) => {
 };
 
 export default EmployeeTable;
+
+// const getEquipIds = async () => {
+//   const empData = await fetch("/api/employees");
+//   const resData = await empData.json();
+
+//   let listEmId = [];
+//   let listResData = [resData];
+//   for (let item of listResData) {
+//     for (let elem of item) {
+//       listEmId.push(elem._id);
+//     }
+//   }
+
+//   let ids = [];
+
+//   for (let item of listEmId) {
+//     const req = await fetch(`/api/employees/${item}`);
+//     const res = await req.json();
+//     let resList = [res];
+
+//     for (let elem of resList) {
+//       ids.push(elem.equipment);
+//     }
+//   }
+//   setIds(ids);
+// };
+// console.log(ids);
+// getEquipIds();
+
+// const sendEquipIds = async () => {
+//   const data = await getEquipIds();
+//   if (data) {
+//     fetch("/api/employeesEquipments", {
+//       method: "POST",
+//       credentials: "include",
+//       headers: {
+//         "Content-Type": "application/json",
+//       },
+//       body: JSON.stringify({ ids: data }),
+//     })
+//       .then((response) => response.json())
+//       .then((data) => console.log(data));
+//   }
+// };
+
+// sendEquipIds();
+// useEffect(() => {
+//   fetch("/api/employeesEquipments", {
+//     method: "POST",
+//     credentials: "include",
+//     headers: {
+//       "Content-Type": "application/json",
+//     },
+//     body: JSON.stringify({ ids: ids }),
+//   })
+//     .then((response) => response.json())
+//     .then((data) => console.log(data));
+// }, []);
