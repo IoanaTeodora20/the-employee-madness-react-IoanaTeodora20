@@ -5,13 +5,12 @@ const EmployeeForm = ({ onSave, disabled, employee, onCancel }) => {
   const [isSenior, setSeniorColor] = useState(false);
   const [color, setColor] = useState();
   const [isJunior, setJunior] = useState(false);
+  const [companyData, setCompanyData] = useState([]);
+
   const onSubmit = (e) => {
     e.preventDefault();
-    let years_experience = ["years_experience", "0"];
     const formData = new FormData(e.target);
-    if (![formData].includes(years_experience)) {
-      [formData].push(years_experience);
-    }
+
     const entries = [...formData.entries()];
 
     console.log([...formData]);
@@ -28,8 +27,12 @@ const EmployeeForm = ({ onSave, disabled, employee, onCancel }) => {
     fetch("/api/colors", { method: "GET", credentials: "include" })
       .then((response) => response.json())
       .then((data) => setColorsData(data));
+    fetch("/api/company", { method: "GET", credentials: "include" })
+      .then((response) => response.json())
+      .then((data) => setCompanyData(data));
   }, []);
 
+  console.log(companyData);
   return (
     <form className="EmployeeForm" onSubmit={onSubmit}>
       {employee && (
@@ -65,6 +68,21 @@ const EmployeeForm = ({ onSave, disabled, employee, onCancel }) => {
           name="position"
           id="position"
         />
+
+        <div className="control">
+          <label htmlFor="company">Company:</label>
+          <input
+            defaultValue={employee ? employee.company : null}
+            name="company"
+            id="company"
+            list="list"
+          />
+          <datalist id="list">
+            {companyData.map((company) => {
+              return <option key={company._id} value={company.name} />;
+            })}
+          </datalist>
+        </div>
       </div>
       {isSenior ? (
         <div className="control">
@@ -93,6 +111,22 @@ const EmployeeForm = ({ onSave, disabled, employee, onCancel }) => {
           />
         </div>
       ) : null}
+
+      {/* <div className="control">
+        <select name="color" onChange={(e) => setColor(e.target.value)}>
+          <option value="" disabled default selected>
+            Select Color
+          </option>
+
+          {colorsData.map((color) => {
+            return (
+              <option key={color.id} value={color.id}>
+                {color.name}
+              </option>
+            );
+          })}
+        </select>
+      </div> */}
 
       <div className="buttons">
         <button type="submit" disabled={disabled}>

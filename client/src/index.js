@@ -15,6 +15,7 @@ import "./index.css";
 import TableTest from "./Pages/TableTest";
 import FormTest from "./Pages/FormTest";
 import MissingDataList from "./Pages/MissingTableList";
+import CompanyCreator from "./Pages/CompanyCreator";
 
 const router = createBrowserRouter([
   {
@@ -52,6 +53,7 @@ const router = createBrowserRouter([
       },
       { path: "/createEquip", element: <EquipmentCreator /> },
       { path: "/missingEmployees", element: <MissingDataList /> },
+      { path: "/createComp", element: <CompanyCreator /> },
     ],
   },
 ]);

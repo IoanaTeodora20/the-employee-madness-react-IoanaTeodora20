@@ -1,26 +1,25 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import EmployeeForm from "../Components/EmployeeForm";
+import CompanyForm from "../Components/CompanyForm/CompanyForm";
 
-const createEmployee = (employee) => {
-  console.log(employee);
-  return fetch("/api/employees", {
+const createCompany = (company) => {
+  return fetch("/api/company", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(employee),
+    body: JSON.stringify(company),
   }).then((res) => res.json());
 };
 
-const EmployeeCreator = () => {
+const CompanyCreator = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
 
-  const handleCreateEmployee = (employee) => {
+  const handleCreateCompany = (company) => {
     setLoading(true);
 
-    createEmployee(employee)
+    createCompany(company)
       .then(() => {
         navigate("/");
       })
@@ -33,12 +32,12 @@ const EmployeeCreator = () => {
   };
 
   return (
-    <EmployeeForm
+    <CompanyForm
       onCancel={() => navigate("/")}
       disabled={loading}
-      onSave={handleCreateEmployee}
+      onSave={handleCreateCompany}
     />
   );
 };
 
-export default EmployeeCreator;
+export default CompanyCreator;

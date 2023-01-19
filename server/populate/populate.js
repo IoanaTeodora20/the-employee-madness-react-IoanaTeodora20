@@ -12,6 +12,8 @@ const falseData = require("./falseData.json");
 const favColorModel = require("../db/favColorModel");
 const EmployeeModel = require("../db/employee.model");
 const EquipmentModel = require("../db/equipmentSchema");
+const companyData = require("./companies.json");
+const CompanyModel = require("../db/companySchema");
 
 const mongoUrl = process.env.MONGO_URL;
 
@@ -33,6 +35,7 @@ const populateEmployees = async () => {
     position: pick(positions),
     equipment: idList,
     map: pick(falseData),
+    company: pick(companyData),
   }));
 
   await EmployeeModel.create(...employees);
@@ -43,6 +46,13 @@ const populateEquipments = async () => {
   await EquipmentModel.deleteMany();
   await EquipmentModel.insertMany(equipments);
   console.log("Equipments created");
+};
+
+const populateCompanies = async () => {
+  await CompanyModel.deleteMany();
+
+  let company = companyData.map((s) => ({ name: s }));
+  await CompanyModel.insertMany(company);
 };
 
 const populateColors = async () => {
@@ -56,6 +66,7 @@ const main = async () => {
   await populateEmployees();
   await populateEquipments();
   await populateColors();
+  await populateCompanies();
   await mongoose.disconnect();
 };
 

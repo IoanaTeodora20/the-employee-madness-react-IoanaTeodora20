@@ -8,6 +8,7 @@ const Equipment = require("./db/equipmentSchema");
 const favColorModel = require("./db/favColorModel");
 const positions = require("../server/populate/positions.json");
 const levels = require("../server/populate/levels.json");
+const Company = require("./db/companySchema");
 const { ObjectID, ObjectId } = require("bson");
 const { json } = require("express");
 const PORT = 8080;
@@ -81,6 +82,7 @@ app.get("/api/robert", async (req, res) => {
 });
 
 app.post("/api/employees/", async (req, res, next) => {
+  console.log(req.body);
   const employee = req.body;
 
   try {
@@ -241,6 +243,27 @@ app.post("/api/ticked", async (req, res) => {
   });
   let result = await EmployeeModel.find();
   res.json({ result: result });
+});
+
+app.post("/api/company/", async (req, res, next) => {
+  console.log(req.body);
+  const company = req.body;
+
+  try {
+    const saved = await Company.create(company);
+    return res.json(saved);
+  } catch (err) {
+    return next(err);
+  }
+});
+
+app.get("/api/company/", async (req, res, next) => {
+  try {
+    const companies = await Company.find();
+    return res.json(companies);
+  } catch (err) {
+    return next(err);
+  }
 });
 
 const main = async () => {
