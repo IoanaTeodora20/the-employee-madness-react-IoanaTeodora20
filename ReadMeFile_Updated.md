@@ -78,5 +78,6 @@ And the create-react-app react-scripts package will start your frontend on the 3
 
 ## Visuals
 
-![2023-05-22 (7)](https://github.com/CodecoolGlobal/the-employee-madness-react-IoanaTeodora20/assets/108082444/e9f6f889-5470-44be-a1af-dcafc2dd009a)
+![Screenshot 2023-06-12 135319](https://github.com/CodecoolGlobal/the-employee-madness-react-IoanaTeodora20/assets/108082444/1b55a1bb-9e77-4dbf-bd94-96247913f897)
+
 
