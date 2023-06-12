@@ -1,3 +1,4 @@
+
 # The Employee Madness
 
 ## Description
@@ -78,3 +79,4 @@ And the create-react-app react-scripts package will start your frontend on the 3
 ## Visuals
 
 ![2023-05-22 (7)](https://github.com/CodecoolGlobal/the-employee-madness-react-IoanaTeodora20/assets/108082444/e9f6f889-5470-44be-a1af-dcafc2dd009a)
+

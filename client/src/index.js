@@ -6,12 +6,16 @@ import reportWebVitals from "./reportWebVitals";
 import Layout from "./Pages/Layout";
 import ErrorPage from "./Pages/ErrorPage";
 import EmployeeList from "./Pages/EmployeeList";
+import EquipmentList from "./Pages/EquipmentList";
 import EmployeeCreator from "./Pages/EmployeeCreator";
 import EmployeeUpdater from "./Pages/EmployeeUpdater";
-
+import EquipmentUpdater from "./Pages/EquipmentUpdater";
+import EquipmentCreator from "./Pages/EquipmentCreator";
 import "./index.css";
 import TableTest from "./Pages/TableTest";
 import FormTest from "./Pages/FormTest";
+import MissingDataList from "./Pages/MissingTableList";
+import CompanyCreator from "./Pages/CompanyCreator";
 
 const router = createBrowserRouter([
   {
@@ -39,6 +43,17 @@ const router = createBrowserRouter([
         path: "/form-test",
         element: <FormTest />,
       },
+      {
+        path: "/equipmentTable",
+        element: <EquipmentList />,
+      },
+      {
+        path: "/updateEquipments/:id",
+        element: <EquipmentUpdater />,
+      },
+      { path: "/createEquip", element: <EquipmentCreator /> },
+      { path: "/missingEmployees", element: <MissingDataList /> },
+      { path: "/createComp", element: <CompanyCreator /> },
     ],
   },
 ]);

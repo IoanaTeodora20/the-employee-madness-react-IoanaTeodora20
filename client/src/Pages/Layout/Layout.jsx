@@ -8,10 +8,20 @@ const Layout = () => (
       <ul>
         <li className="grow">
           <Link to="/">Employees</Link>
+          <br />
+          <Link to="/equipmentTable">Equipments Table</Link>
+          <br />
+          <Link to="/missingEmployees">Missing Employees</Link>
         </li>
         <li>
           <Link to="/create">
             <button type="button">Create Employee</button>
+          </Link>
+          <Link to="/createEquip">
+            <button type="button">Create Equipments</button>
+          </Link>
+          <Link to="/createComp">
+            <button type="button">Create Company</button>
           </Link>
         </li>
       </ul>

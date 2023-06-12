@@ -1,23 +1,23 @@
 import { useEffect, useState } from "react";
 import Loading from "../Components/Loading";
-import EmployeeTable from "../Components/EmployeeTable";
+import MissingTable from "../Components/MissingTable/MissingEmployeeTable";
 
-const fetchEmployees = (signal, position, level) => {
-  return fetch("/api/employees", { signal }).then((res) => res.json());
+const fetchMissingEmployees = (signal) => {
+  return fetch("/api/missing", { signal }).then((res) => res.json());
 };
 
-const deleteEmployee = (id) => {
-  return fetch(`/api/employees/${id}`, { method: "DELETE" }).then((res) =>
+const deleteMissingEmployee = (id) => {
+  return fetch(`/api/missing/${id}`, { method: "DELETE" }).then((res) =>
     res.json()
   );
 };
 
-const EmployeeList = () => {
+const MissingDataList = () => {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState(null);
 
   const handleDelete = (id) => {
-    deleteEmployee(id).catch((err) => {
+    deleteMissingEmployee(id).catch((err) => {
       console.log(err);
     });
 
@@ -29,7 +29,7 @@ const EmployeeList = () => {
   useEffect(() => {
     const controller = new AbortController();
 
-    fetchEmployees(controller.signal)
+    fetchMissingEmployees(controller.signal)
       .then((employees) => {
         setLoading(false);
         setData(employees);
@@ -48,7 +48,7 @@ const EmployeeList = () => {
     return <Loading />;
   }
 
-  return <EmployeeTable employees={data} onDelete={handleDelete} />;
+  return <MissingTable employees={data} onDelete={handleDelete} />;
 };
 
-export default EmployeeList;
+export default MissingDataList;
