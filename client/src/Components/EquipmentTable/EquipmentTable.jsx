@@ -1,8 +1,5 @@
 import { Link } from "react-router-dom";
 import "./EquipmentTable.css";
-// import { useEffect, useState } from "react";
-// import axios from "axios";
-// const base_url = process.env.REACT_APP_API_URL;
 
 const EquipmentTable = ({ equipmentData, onDelete }) => {
   return (
@@ -23,7 +20,7 @@ const EquipmentTable = ({ equipmentData, onDelete }) => {
               <td>{equipment.amount}</td>
               <td>
                 <Link to={`/updateEquipments/${equipment._id}`}>
-                  <button type="button">Update</button>
+                  <button type="button">Edit</button>
                 </Link>
                 <button type="button" onClick={() => onDelete(equipment._id)}>
                   Delete

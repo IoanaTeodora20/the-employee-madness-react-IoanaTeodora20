@@ -61,10 +61,9 @@ const MissingTable = ({ employees, onDelete }) => {
       <table>
         <thead>
           <tr>
-            <th>Present</th>
             <th onClick={() => sortTable("name")}>Name</th>
-            <th>Level</th>
             <th>Position</th>
+            <th>Level</th>
             <th>
               <select onChange={(e) => setPosition(e.target.value)}>
                 <option value="" disabled default selected>
@@ -100,7 +99,7 @@ const MissingTable = ({ employees, onDelete }) => {
               <td>{employee.position}</td>
               <td>
                 <Link to={`/update/${employee._id}`}>
-                  <button type="button">Update</button>
+                  <button type="button">Edit</button>
                 </Link>
                 <button type="button" onClick={() => onDelete(employee._id)}>
                   Delete

@@ -3,8 +3,8 @@ import { useEffect, useState } from "react";
 const EmployeeForm = ({ onSave, disabled, employee, onCancel }) => {
   const [colorsData, setColorsData] = useState([]);
   const [isSenior, setSeniorColor] = useState(false);
+  const [isJunior, setJunior] = useState(null);
   const [color, setColor] = useState();
-  const [isJunior, setJunior] = useState(false);
   const [companyData, setCompanyData] = useState([]);
 
   const onSubmit = (e) => {
@@ -101,36 +101,9 @@ const EmployeeForm = ({ onSave, disabled, employee, onCancel }) => {
           </select>
         </div>
       ) : null}
-      {!isJunior ? (
-        <div className="control">
-          <label htmlFor="experience">Years of Experience:</label>
-          <input
-            defaultValue={employee ? employee.years_experience : null}
-            name="years_experience"
-            id="experience"
-          />
-        </div>
-      ) : null}
-
-      {/* <div className="control">
-        <select name="color" onChange={(e) => setColor(e.target.value)}>
-          <option value="" disabled default selected>
-            Select Color
-          </option>
-
-          {colorsData.map((color) => {
-            return (
-              <option key={color.id} value={color.id}>
-                {color.name}
-              </option>
-            );
-          })}
-        </select>
-      </div> */}
-
       <div className="buttons">
         <button type="submit" disabled={disabled}>
-          {employee ? "Update Employee" : "Create Employee"}
+          {employee ? "Edit Employee" : "Create Employee"}
         </button>
 
         <button type="button" onClick={onCancel}>

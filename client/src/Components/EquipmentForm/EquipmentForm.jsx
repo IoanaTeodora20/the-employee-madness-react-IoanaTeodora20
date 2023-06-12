@@ -48,7 +48,7 @@ const EquipmentForm = ({ onSave, disabled, equipment, onCancel }) => {
 
       <div className="buttons">
         <button type="submit" disabled={disabled}>
-          {equipment ? "Update Equipment" : "Create Equipment"}
+          {equipment ? "Edit Equipment" : "Create Equipment"}
         </button>
 
         <button type="button" onClick={onCancel}>

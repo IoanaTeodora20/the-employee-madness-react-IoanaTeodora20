@@ -6,7 +6,6 @@ import { useEffect, useState } from "react";
 
 const EmployeeTable = ({ employees, onDelete }) => {
   const [employeesData, setEmployeesData] = useState(employees);
-  // const [ids, setIds] = useState([]);
   const [position, setPosition] = useState();
   const [level, setLevel] = useState();
   const [inputName, setInputName] = useState("");
@@ -56,18 +55,18 @@ const EmployeeTable = ({ employees, onDelete }) => {
       .then((data) => setEmployeesData(data.result));
   };
 
-  const handlePositionTicked = async (id) => {
-    fetch("http://localhost:8080/api/ticked", {
-      method: "POST",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ id: id }),
-    })
-      .then((response) => response.json())
-      .then((data) => setEmployeesData(data.result));
-  };
+  // const handlePositionTicked = async (id) => {
+  //   fetch("http://localhost:8080/api/ticked", {
+  //     method: "POST",
+  //     credentials: "include",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //     body: JSON.stringify({ id: id }),
+  //   })
+  //     .then((response) => response.json())
+  //     .then((data) => setEmployeesData(data.result));
+  // };
   const positions = Array.from(
     new Set(employees.map((employee) => employee.position))
   );
@@ -132,11 +131,10 @@ const EmployeeTable = ({ employees, onDelete }) => {
         <thead>
           <tr>
             <th>Present</th>
-            <th onClick={(e) => filterEmployees(e)}>Map</th>
             <th onClick={() => sortTable("name")}>Name</th>
             <th>Level</th>
             <th>Position</th>
-            <th>Years Experience</th>
+            <th>Company</th>
             <th>
               <select onChange={(e) => setPosition(e.target.value)}>
                 <option value="" disabled default selected>
@@ -186,27 +184,13 @@ const EmployeeTable = ({ employees, onDelete }) => {
                   onChange={() => handlePresenceClick(employee._id)}
                 />
               </td>
-              <td>
-                <input
-                  type="checkbox"
-                  id="map"
-                  name="map"
-                  checked={employee.map ? "checked" : ""}
-                  onChange={() => {
-                    setId(employee._id);
-                    setPosition(employee.position);
-                    handlePositionTicked(employee._id);
-                  }}
-                />
-                {error ? <p>Please, select only ONE employee</p> : null}
-              </td>
               <td>{employee.name}</td>
               <td>{employee.level}</td>
               <td>{employee.position}</td>
-              <td>{employee.years_experience}</td>
+              <td>{employee.company}</td>
               <td>
                 <Link to={`/update/${employee._id}`}>
-                  <button type="button">Update</button>
+                  <button type="button">Edit</button>
                 </Link>
                 <button type="button" onClick={() => onDelete(employee._id)}>
                   Delete
@@ -221,61 +205,3 @@ const EmployeeTable = ({ employees, onDelete }) => {
 };
 
 export default EmployeeTable;
-
-// const getEquipIds = async () => {
-//   const empData = await fetch("/api/employees");
-//   const resData = await empData.json();
-
-//   let listEmId = [];
-//   let listResData = [resData];
-//   for (let item of listResData) {
-//     for (let elem of item) {
-//       listEmId.push(elem._id);
-//     }
-//   }
-
-//   let ids = [];
-
-//   for (let item of listEmId) {
-//     const req = await fetch(`/api/employees/${item}`);
-//     const res = await req.json();
-//     let resList = [res];
-
-//     for (let elem of resList) {
-//       ids.push(elem.equipment);
-//     }
-//   }
-//   setIds(ids);
-// };
-// console.log(ids);
-// getEquipIds();
-
-// const sendEquipIds = async () => {
-//   const data = await getEquipIds();
-//   if (data) {
-//     fetch("/api/employeesEquipments", {
-//       method: "POST",
-//       credentials: "include",
-//       headers: {
-//         "Content-Type": "application/json",
-//       },
-//       body: JSON.stringify({ ids: data }),
-//     })
-//       .then((response) => response.json())
-//       .then((data) => console.log(data));
-//   }
-// };
-
-// sendEquipIds();
-// useEffect(() => {
-//   fetch("/api/employeesEquipments", {
-//     method: "POST",
-//     credentials: "include",
-//     headers: {
-//       "Content-Type": "application/json",
-//     },
-//     body: JSON.stringify({ ids: ids }),
-//   })
-//     .then((response) => response.json())
-//     .then((data) => console.log(data));
-// }, []);

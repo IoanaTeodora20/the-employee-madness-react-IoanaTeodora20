@@ -28,7 +28,7 @@ const CompanyForm = ({ onSave, disabled, company, onCancel }) => {
 
       <div className="buttons">
         <button type="submit" disabled={disabled}>
-          {company ? "Update Company" : "Create Company"}
+          {company ? "Edit Company" : "Create Company"}
         </button>
 
         <button type="button" onClick={onCancel}>

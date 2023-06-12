@@ -248,7 +248,6 @@ app.post("/api/ticked", async (req, res) => {
 app.post("/api/company/", async (req, res, next) => {
   console.log(req.body);
   const company = req.body;
-
   try {
     const saved = await Company.create(company);
     return res.json(saved);
