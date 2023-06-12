@@ -225,26 +225,6 @@ app.get("/api/colors", async (req, res) => {
   );
 });
 
-app.post("/api/checkMap", async (req, res) => {
-  let employeeId = objectId(req.body.id);
-  let employee = await EmployeeModel.findById(employeeId);
-  await EmployeeModel.findByIdAndUpdate(employee, {
-    map: !employee.map,
-  });
-  const result = await EmployeeModel.find({ position: req.body.position });
-  res.json({ result: result });
-});
-
-app.post("/api/ticked", async (req, res) => {
-  let employeeId = objectId(req.body.id);
-  let employee = await EmployeeModel.findById(employeeId);
-  await EmployeeModel.findByIdAndUpdate(employee, {
-    map: !employee.map,
-  });
-  let result = await EmployeeModel.find();
-  res.json({ result: result });
-});
-
 app.post("/api/company/", async (req, res, next) => {
   console.log(req.body);
   const company = req.body;
