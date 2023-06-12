@@ -1,3 +1,4 @@
+
 # The Employee Madness
 
 ## Description
@@ -76,3 +77,7 @@ npm start
 And the create-react-app react-scripts package will start your frontend on the 3000 port and you can visit the http://localhost:3000 on your preferred browser.
 
 ## Visuals
+
+![Screenshot 2023-06-12 135319](https://github.com/CodecoolGlobal/the-employee-madness-react-IoanaTeodora20/assets/108082444/1b55a1bb-9e77-4dbf-bd94-96247913f897)
+
+
