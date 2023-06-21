@@ -65,9 +65,9 @@ npm install
 
 ### Proxy
 
-Watch for the port of your rest api. By default it will bind on port 8080 and the frontend proxy settings also depend on this configuration. If you for some reasons change the port of the backend, don't forget to change the ./client/package.json proxy settings as well.
+Watch for the port of your rest API. By default, it will bind on port 8080 and the frontend proxy settings also depend on this configuration. If you for some reason change the port of the backend, don't forget to change the ./client/package.json proxy settings as well.
 
-### Runnig the code
+### Running the code
 
 ```bash
 cd ./client
@@ -78,6 +78,6 @@ And the create-react-app react-scripts package will start your frontend on the 3
 
 ## Visuals
 
-![Screenshot 2023-06-12 135319](https://github.com/CodecoolGlobal/the-employee-madness-react-IoanaTeodora20/assets/108082444/1b55a1bb-9e77-4dbf-bd94-96247913f897)
 
+![2023-05-22 (7)](https://github.com/IoanaTeodora20/the-employee-madness-react-IoanaTeodora20/assets/108082444/7765b4d2-ffac-4de0-8f08-348fb86407d9)
 
